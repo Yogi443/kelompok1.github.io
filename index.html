@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- CSS only -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT"
+      crossorigin="anonymous"
+    />
+    <!-- JavaScript Bundle with Popper -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css"
+    />
+    <title>Document</title>
+    <style>
+      body {
+        font-family: "Roboto", sans-serif;
+      }
+
+      .background {
+        background: rgb(18, 5, 78);
+        background: linear-gradient(
+          142deg,
+          rgba(18, 5, 78, 1) 2.0203%,
+          rgba(61, 6, 95, 1) 28.846%,
+          rgba(69, 16, 138, 1) 100%
+        );
+      }
+
+      .alert-danger {
+        background-color: #c21152;
+        border: none;
+        color: #fac4c4;
+      }
+
+      .bg-info {
+        background-color: #c211a1 !important;
+        color: white;
+      }
+
+      .btn-primary:hover {
+        background-color: #e816c2 !important;
+      }
+
+      .btn-warning:hover {
+        background-color: #f8c839 !important;
+      }
+
+      .hide {
+        height: 0;
+        opacity: 0;
+        overflow: hidden;
+      }
+
+      /* 
+      .collapse {
+         transition: all 0.5s;
+      } */
+
+      #result {
+        word-wrap: break-word;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="background" style="min-height: 100vh">
+      <div class="pt-lg-5 pt-0"></div>
+
+      <div class="container-fluid col-xl-10 col-xxl-8 px-4 py-lg-5 py-3">
+        <div class="row align-items-center g-lg-5 py-5">
+          <div class="col-lg-6 col-12 text-center text-lg-start">
+            <div class="col-lg-10 col-10 mx-auto">
+              <h1 class="display-5 fw-bold mb-3" style="color: #c211a1">
+                Cryptography Program
+              </h1>
+              <p class="text-light">
+                Oleh Kelompok 1: Hendianto, Yogi, Naqsya, Iin, Rika, Rellyta,
+                Dyah, Novia.
+              </p>
+              <form class="p-3 p-md-3 background shadow rounded-5">
+                <div class="mb-3 text-start">
+                  <label
+                    for="exampleFormControlTextarea1"
+                    class="form-label text-light"
+                    >Masukkan Teks</label
+                  >
+                  <div class="alert mb-0 p-0"></div>
+                  <textarea
+                    class="form-control rounded-5 shadow"
+                    id="exampleFormControlTextarea1"
+                    rows="5"
+                    placeholder=""
+                    required
+                  ></textarea>
+                </div>
+                <div class="d-sm-flex mb-3 d-grid">
+                  <div class="me-auto p-2">
+                    <button
+                      id="reset"
+                      class="btn btn-sm btn-warning rounded-5"
+                      type="reset"
+                    >
+                      <i class="fi fi-rr-rotate-right"></i>
+                    </button>
+                  </div>
+                  <div class="p-2">
+                    <button
+                      class="btn btn-sm btn-primary rounded-5 px-sm-3 px-5"
+                      id="encrypt"
+                      type="button"
+                      style="background-color: #c211a1; border-color: #c211a1"
+                    >
+                      Encrypt
+                    </button>
+                  </div>
+                  <div class="p-2">
+                    <button
+                      class="btn btn-sm btn-outline-light rounded-5 px-sm-3 px-5"
+                      id="decrypt"
+                      type="button"
+                    >
+                      Decrypt
+                    </button>
+                  </div>
+                </div>
+
+                <div class="result"></div>
+              </form>
+            </div>
+          </div>
+          <div class="col-md-6 mx-auto col-lg-6 text-center">
+            <img src="/img/SVG/Asset 4.svg" alt="" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- javascript -->
+    <script
+      src="https://code.jquery.com/jquery-3.6.1.min.js"
+      integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      $(document).ready(function () {
+        // ketika tombol di reset maka halaman di reload
+        $("#reset").click(function () {
+          location.reload();
+        });
+        // ketika tombol encrypt di tekan
+        $("#encrypt").click(function () {
+          let input = $("textarea").val().split("");
+
+          // jika inputan kosong maka akan muncul alert
+          if (input == "") {
+            $(".alert")
+              .html(
+                '<div id="alert" class="alert alert-danger rounded-5" role="alert">Wajib diisi </div>'
+              )
+              .show("slow")
+              .delay();
+          } else {
+            let hasil = encrypt(input);
+            $(".result").html(
+              "<h6 class='text-light'>Hasil: </h6>" +
+                "<textarea id='result' rows='1' class='bg-info rounded-5 shadow p-3 mt-3 col-12 border-0 form-control rounded-5 shadow'>" +
+                hasil +
+                "</textarea>" +
+                '<button id="copy" type="button" class="btn btn-sm btn-outline-light rounded-5 px-sm-3 px-5 mt-3">Copy</button>'
+            );
+            // membuat tombol copy dan melakukan fungsi copy
+            $("#copy").click(function () {
+              // Get the text field
+              var area = $("#result");
+              area.focus();
+              area.select();
+
+              var successful = document.execCommand("copy");
+              var msg = successful ? "successful" : "unsuccessful";
+            });
+          }
+        });
+
+        // ketika tombol decrypt di tekan
+        $("#decrypt").click(function () {
+          let input =
+            $("textarea")
+              .val()
+              .match(/.{1,2}/g) ?? [];
+
+          // jika inputan kosong maka akan muncul alert
+          if (input == "") {
+            $(".alert")
+              .html(
+                '<div id="alert" class="alert alert-danger rounded-5" role="alert">Wajib diisi </div>'
+              )
+              .show("slow")
+              .delay();
+          } else {
+            let hasil = decrypt(input);
+            $(".result").html(
+              "<h6 class='text-light'>Hasil: </h6>" +
+                "<div id='result' class='text-md-center bg-info rounded-5 shadow p-3 mt-3'>" +
+                hasil +
+                "</div>"
+            );
+          }
+        });
+      });
+
+      // definisikan characterSymbol
+      let charSym =
+        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&* ();:,.?/";
+      // ubah menjadi array
+      charSym = charSym.split("");
+
+      // Definisikan allCharKeyb
+      let allCharKeyb = "اَبَتَثَجَحَخَدَذَرَزَسَشَصَضَطَظَعَغَفَقَكَلَمَنَهَوَيَءَئَؤَىَةًٌٍََََََََََََََََََََََََُِّّْٰٕٖٜٟٓٔٗ٘ٙٚٛٝٞ٠َ١َ٢َ٣َ٤َ٥َ٦َ٧َ٨َ٩َ٪َ٫َ٬َ٭َٮَٯََٰٱَٲَٳَٴَٵَٶَٷَٸَٹَٺَٻَټَٽَپَٿَڀَځَڂَڃَڄَڅَچَڇَڈَډَڊَڋَڌَڍَڎَڏَڐَڑَڒَړَڔَڕَږَڗَژَڙَښَڛَڜَڝَڞَڟَڠَڡَڢَڣَڤَڥَڦَڧَڨَکَڪَګَڬَڭَڮَگَڰَڱَڲَڳَڴَڵَڶَڷَڸَڹَںَڻَڼَڽَھَڿَۀَہَۂَۃَۄَۅَۆَۇَۈَۉَۊَۋَیَۍَێَۏَېَۑَےَۓَ۔َەََََۖۗۘ";
+
+      // ubah menjadi array
+      allCharKeyb = allCharKeyb.match(/.{1,2}/g) ?? [];
+
+      // fungsi penambahan noll
+      let tamNol = (num) => {
+        // conversi num ke string
+        num = num.toString();
+        j = "";
+        if (num.length === 1) {
+          j = "000";
+        } else if (num.length === 2) {
+          j = "00";
+        } else if (num.length === 3) {
+          j = "0";
+        }
+        return j;
+      };
+
+      // definisikan objek dari lopping caracter terdapat 30 character menamabahkan pasangan key yang dibuat dengan menggunakan looping berdasarkan banyak karakter di dalam array objek
+      // dan mendefinisikan value dari array yang dibuat dengan menggunakan
+      let objChar = (sym) => {
+        let i = 0;
+        let arr = [];
+        sym.forEach((c) => {
+          // jalankan fungsi tambah nol jika i memiliki lebih dari 1 karakter
+          let tamn = tamNol(i);
+          let key = tamn + i;
+          // Definiskan key dan value
+          let obj = {
+            [key]: c,
+          };
+          arr.push(obj);
+          i++;
+        });
+        return arr;
+      };
+
+      // inisiasi objek character
+      let charObj = objChar(charSym);
+      // inisiasi objek allChar
+      let charObjKeyb = objChar(allCharKeyb);
+
+      // fungsi ambil key dari objek character
+      let getKey = (obj) => {
+        arr = [];
+        obj.forEach((o) => {
+          arr.push(Object.keys(o)[0]);
+        });
+        return arr;
+      };
+
+      // fungsi ambil value dari objek character
+      var getValue = (obj) => {
+        var arr = [];
+        obj.forEach((o) => {
+          arr.push(Object.values(o)[0]);
+        });
+        return arr;
+      };
+
+      /* ======================================= Fungsi Encrypt / Deckrip ======================================= */
+
+      // fungsi jika tombol encrypt di tekan
+      let encrypt = (i) => {
+        // definisikan inputan user
+        let input = i;
+
+        // jika karakter inputan tidak ada di dalam get value maka akan muncul alert
+        let cek = input.every((i) => {
+          return getValue(charObj).includes(i);
+        });
+        if (cek == false) {
+          $(".alert")
+            .html(
+              '<div id="alert" class="alert alert-danger rounded-5" role="alert">Tidak ada karakter yang sesuai di dalam Allowed Symbol </div>'
+            )
+            .show("slow")
+            .delay();
+        }
+
+        // tampilkan key jika inputan adalah value
+        let key = input.map((i) => {
+          let index = getValue(charObj).indexOf(i);
+          return getKey(charObj)[index];
+        });
+
+        // lakukan proses operasi pertambahan terhadap key layer 1
+        // dan lakukan operasi aritmatika karakter tersebut dengan metode lompatan 2
+        i = 0;
+        hasil = key.map((k) => {
+          num = parseInt(k);
+          // jika bilangan itu ganjil maka
+          if (i % 2 == 1) {
+            hasil = num + 5;
+          } else {
+            hasil = num * 2;
+          }
+          return hasil;
+          i++;
+        });
+
+        // ubah hasil menjadi character baru
+        let charNew = hasil.map((h) => {
+          key = tamNol(h);
+          // ambil value char jika key di panggil
+          index = getKey(charObjKeyb).indexOf(key + h);
+          return getValue(charObjKeyb)[index];
+        });
+        return charNew.join("");
+      };
+
+      // fungsi jika tombol decrypt di tekan
+      let decrypt = (i) => {
+        // definisikan inputan user
+        input = i;
+
+        // ubah i kedalam key
+        key = input.map((i) => {
+          index = getValue(charObjKeyb).indexOf(i);
+          return getKey(charObjKeyb)[index];
+        });
+
+        // lakukan proses operasi pengurangan terhadap key layer 1
+        // dan lakukan operasi aritmatika karakter tersebut dengan metode lompatan 2
+        i = 0;
+        hasil = key.map((k) => {
+          num = parseInt(k);
+          // rumus operasi pengurangan 5 dan pembagian 2
+          // jika bilangan itu ganjil maka
+          if (i % 2 == 1) {
+            hasil = num - 5;
+          } else {
+            hasil = num / 2;
+          }
+          return hasil;
+          i++;
+        });
+
+        // panggil value dari key yang di dapat dari hasil operasi layer 1
+        let charOld = hasil.map((h) => {
+          key = tamNol(h);
+          // ambil value char jika key di panggil
+          index = getKey(charObj).indexOf(key + h);
+          return getValue(charObj)[index];
+        });
+        return charOld.join("");
+      };
+    </script>
+  </body>
+</html>
